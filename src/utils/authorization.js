@@ -1,4 +1,4 @@
-import {environment} from '../environments/development';
+import {environment} from '../environment/development';
 
 const Authorization = {
   headers: {

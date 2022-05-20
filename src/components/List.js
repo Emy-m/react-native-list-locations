@@ -5,17 +5,21 @@ import {
   TouchableOpacity,
   StyleSheet,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Location from '../utils/Location';
 import useColorScheme from 'react-native/Libraries/Utilities/useColorScheme';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import ItemSeparator from './ItemSeparator';
-import {environment} from '../environments/development';
+import {environment} from '../environment/development';
 import authorization from '../utils/authorization';
+import Loading from './Loading';
+import Error from './Error';
 
 const List = () => {
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
@@ -25,6 +29,7 @@ const List = () => {
   const loadData = () => {
     setLoading(true);
     setLocations([]);
+    setError(null);
     fetch(environment.baseURL + 'api/locations', authorization)
       .then(res => res.json())
       .then(data => {
@@ -34,8 +39,8 @@ const List = () => {
       })
       .catch(e => {
         setLoading(false);
+        setError(e);
       });
-    setLoading(false);
   };
 
   const handleRefresh = () => {
@@ -60,7 +65,9 @@ const List = () => {
         data={locations}
         renderItem={info => renderItemComponent(info.item)}
         keyExtractor={location => location.id}
-        ItemSeparatorComponent={() => <ItemSeparator />}></FlatList>
+        ItemSeparatorComponent={() => <ItemSeparator />}
+        refreshing={loading}
+        onRefresh={handleRefresh}></FlatList>
     </SafeAreaView>
   );
 };

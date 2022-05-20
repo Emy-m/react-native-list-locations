@@ -7,15 +7,9 @@ interface ErrorProps {
 }
 
 const Error = ({onRefresh}: ErrorProps) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  const textStyle = {
-    color: isDarkMode ? Colors.lighter : Colors.darker,
-  };
   return (
     <View style={[styles.container]}>
-      <Text style={[textStyle, {padding: 40, fontSize: 16}]}>
-        Error de conexion
-      </Text>
+      <Text>Error de conexion</Text>
       <Button
         title="Reintentar"
         onPress={onRefresh}
@@ -26,7 +20,8 @@ const Error = ({onRefresh}: ErrorProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    display: 'flex',
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center',
   },
