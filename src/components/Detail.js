@@ -6,7 +6,7 @@ import Loading from './Loading';
 import Error from './Error';
 import Location from '../utils/Location';
 
-const detail = props => {
+const Detail = props => {
   const {loading, setLoading} = useState(true);
   const {error, setError} = useState(null);
   const {location, setLocation} = useState(null);
@@ -39,10 +39,10 @@ const detail = props => {
     }
     return (
       <View>
-        <Text>location.name</Text>
-        <Text>location.contact</Text>
+        <Text>{location.name}</Text>
+        <Text>{location.contact}</Text>
       </View>
     );
   };
 };
-export default detail;
+export default Detail;

@@ -16,10 +16,12 @@ import {environment} from '../environment/development';
 import authorization from '../utils/authorization';
 import Loading from './Loading';
 import Error from './Error';
+import Detail from './Detail';
 
 const List = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const {detail, setDetail} = useState(-1);
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
@@ -30,6 +32,7 @@ const List = () => {
     setLoading(true);
     setLocations([]);
     setError(null);
+    setDetail(-1);
     fetch(environment.baseURL + 'api/locations', authorization)
       .then(res => res.json())
       .then(data => {
@@ -61,13 +64,17 @@ const List = () => {
 
   return (
     <SafeAreaView>
-      <FlatList
-        data={locations}
-        renderItem={info => renderItemComponent(info.item)}
-        keyExtractor={location => location.id}
-        ItemSeparatorComponent={() => <ItemSeparator />}
-        refreshing={loading}
-        onRefresh={handleRefresh}></FlatList>
+      {detail >= 1 ? (
+        <FlatList
+          data={locations}
+          renderItem={info => renderItemComponent(info.item)}
+          keyExtractor={location => location.id}
+          ItemSeparatorComponent={() => <ItemSeparator />}
+          refreshing={loading}
+          onRefresh={handleRefresh}></FlatList>
+      ) : (
+        <Detail id={detail} />
+      )}
     </SafeAreaView>
   );
 };
