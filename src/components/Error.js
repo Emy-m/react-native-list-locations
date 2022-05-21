@@ -1,5 +1,4 @@
 import {View, Text, Button, StyleSheet, useColorScheme} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import React from 'react';
 
 interface ErrorProps {

@@ -21,7 +21,7 @@ import Detail from './Detail';
 const List = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const {detail, setDetail} = useState(-1);
+  const [detail, setDetail] = useState(null);
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const List = () => {
     setLoading(true);
     setLocations([]);
     setError(null);
-    setDetail(-1);
+
     fetch(environment.baseURL + 'api/locations', authorization)
       .then(res => res.json())
       .then(data => {
@@ -56,7 +56,11 @@ const List = () => {
   };
 
   const renderItemComponent = location => (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        setDetail(location.id);
+      }}>
       <Text style={[textStyle, styles.textTitle]}>{location.name}</Text>
       <Text style={[textStyle, styles.text]}>{location.contact}</Text>
     </TouchableOpacity>
@@ -64,7 +68,7 @@ const List = () => {
 
   return (
     <SafeAreaView>
-      {detail >= 1 ? (
+      {detail == null ? (
         <FlatList
           data={locations}
           renderItem={info => renderItemComponent(info.item)}
@@ -73,7 +77,12 @@ const List = () => {
           refreshing={loading}
           onRefresh={handleRefresh}></FlatList>
       ) : (
-        <Detail id={detail} />
+        <Detail
+          id={detail}
+          getBack={() => {
+            setDetail(null);
+          }}
+        />
       )}
     </SafeAreaView>
   );
