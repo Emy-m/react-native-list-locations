@@ -18,7 +18,7 @@ import Loading from './Loading';
 import Error from './Error';
 import Detail from './Detail';
 
-const List = () => {
+const List = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [detail, setDetail] = useState(null);
@@ -28,22 +28,36 @@ const List = () => {
     loadData();
   }, []);
 
-  const loadData = () => {
-    setLoading(true);
-    setLocations([]);
-    setError(null);
+  const handleDetail = (location: Location) => {
+    navigation.navigate('Detail', {id: location.id});
+  };
 
-    fetch(environment.baseURL + 'api/locations', authorization)
-      .then(res => res.json())
-      .then(data => {
-        let locations = data?.map(location => new Location(location));
-        setLocations(locations);
-        setLoading(false);
-      })
-      .catch(e => {
-        setLoading(false);
-        setError(e);
-      });
+  const loadData = () => {
+    // setLoading(true);
+    // setLocations([]);
+    // setError(null);
+    // fetch(environment.baseURL + 'api/locations', authorization)
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     let locations = data?.map(location => new Location(location));
+    //     setLocations(locations);
+    //     setLoading(false);
+    //   })
+    //   .catch(e => {
+    //     setLoading(false);
+    //     setError(e);
+    //   });
+    setLocations([
+      {
+        id: 1,
+        latitude: 41.40338,
+        longitude: 2.17403,
+        name: 'prueba',
+        description: 'descripcion',
+        contact: 'contacto',
+      },
+    ]);
+    setLoading(false);
   };
 
   const handleRefresh = () => {
@@ -55,14 +69,14 @@ const List = () => {
     color: isDarkMode ? Colors.lighter : Colors.darker,
   };
 
-  const renderItemComponent = location => (
+  const renderItemComponent = (data: Location) => (
     <TouchableOpacity
       style={styles.container}
       onPress={() => {
-        setDetail(location.id);
+        handleDetail(data);
       }}>
-      <Text style={[textStyle, styles.textTitle]}>{location.name}</Text>
-      <Text style={[textStyle, styles.text]}>{location.contact}</Text>
+      <Text style={[textStyle, styles.textTitle]}>{data.name}</Text>
+      <Text style={[textStyle, styles.text]}>{data.contact}</Text>
     </TouchableOpacity>
   );
 

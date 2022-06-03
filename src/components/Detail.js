@@ -7,13 +7,28 @@ import Error from './Error';
 import Location from '../utils/Location';
 import MapView, {Marker} from 'react-native-maps';
 
-const Detail = ({id, getBack}) => {
+const pruebaLocation = {
+  id: 1,
+  latitude: 41.40338,
+  longitude: 2.17403,
+  name: 'prueba',
+  description: 'descripcion',
+  contact: 'contacto',
+};
+
+interface Props {
+  id: number;
+}
+
+const Detail = (props: Props) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [location, setLocation] = useState(null);
 
   useEffect(() => {
-    loadData();
+    //loadData();
+    setLocation(pruebaLocation);
+    setLoading(false);
   }, []);
 
   const loadData = () => {
@@ -21,7 +36,7 @@ const Detail = ({id, getBack}) => {
     setError(null);
 
     setTimeout(() => {
-      fetch(environment.baseURL + 'api/locations/' + id, Authorization)
+      fetch(environment.baseURL + 'api/locations/' + props.id, Authorization)
         .then(res => res.json())
         .then(data => {
           setLocation(new Location(data));
@@ -48,6 +63,7 @@ const Detail = ({id, getBack}) => {
   return (
     <View style={styles.container}>
       <MapView
+        showsUserLocation={true}
         style={styles.map}
         initialRegion={{
           latitude: location.latitude,
@@ -68,10 +84,6 @@ const Detail = ({id, getBack}) => {
 
       <Text style={styles.textTitle}>{location.name}</Text>
       <Text style={styles.text}>{location.contact}</Text>
-
-      <TouchableOpacity style={[styles.buttonStyle]} onPress={getBack}>
-        <Text>Volver</Text>
-      </TouchableOpacity>
     </View>
   );
 };
